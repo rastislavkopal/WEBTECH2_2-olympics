@@ -8,5 +8,12 @@ if (empty($username) || empty($password) || empty($servername))
 
 $model = new OlympicsModel($username, $password, $servername);
 
-$arr = $model->getOlympicWinners();
-echo $arr;
+if(!isset($_GET['id'])){
+    $arr = $model->getOlympicWinners();
+    echo $arr;
+} else{
+    $arr = $model->getPlacementsById($_GET['id']);
+    echo $arr;
+}
+
+

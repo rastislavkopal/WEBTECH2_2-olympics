@@ -1,16 +1,11 @@
 $(document).ready( function () {
     updateListOfOlympicWinners();
-
-    let searchParams = new URLSearchParams(window.location.search);
-
-    // if (searchParams.has('floatingresponse')){
-    //     let param = searchParams.get('floatingresponse');
-    //     displayMessage(param);
-    // }
 } );
 
 function displayMessage(response)
 {
+    if($('#uploader_div').css('display') != 'none')
+        $('#uploader_div').hide('slow');
     var message = $('<div class="alert alert-error error-message" style="display: none;">');
     var close = $('<button type="button" class="close" data-dismiss="alert">&times</button>');
     message.append(close); // adding the close button to the message
@@ -49,8 +44,7 @@ function showTopTen()
                 "destroy": true,
                 "order": [[ 2, "desc" ]],
                 "columns" : [
-                    { "data" : "name", title:'Meno' },
-                    { "data" : "surname", title:'Priezvisko'  },
+                    { "data" : "name", title:'Celé meno' },
                     { "data" : "wins", title:'Počet medailí'  },
                     { "data" : "update" },
                     { "data" : "delete" },
@@ -73,8 +67,7 @@ function updateListOfOlympicWinners()
                 "scrollCollapse": true,
                 "destroy": true,
                 "columns" : [
-                    { "data" : "name", title:'Meno'  },
-                    { "data" : "surname", title:'Priezvisko'  },
+                    { "data" : "name", title:'Celé meno' },
                     { "data" : "year", title:'Rok výhry'  },
                     { "data" : "city", title:'Miesto konania'  },
                     { "data" : "type", title:'Typ OH'  },
@@ -91,7 +84,7 @@ function updateRowById(action)
 
         }
     );
-    window.location.href = "http://wt78.fei.stuba.sk/zadanie2/useredit.php?" + action;
+    window.location.href = "http://wt78.fei.stuba.sk/zadanie2/views/useredit.php?" + action;
 }
 
 function deleteRowById(action)
@@ -117,10 +110,32 @@ $(".form-check-input").change(function() {
     }
 });
 
+function createPerson()
+{
+    let data = $('#formAddPerson').serializeArray();
+    var formData = {
+        "name": data[0]["value"],
+        "surname": data[1]["value"],
+        "birth_day": data[2]["value"],
+        "birth_place": data[1]["value"],
+        "birth_country": data[2]["value"],
+        "death_day": data[1]["value"],
+        "death_place": data[2]["value"],
+        "death_country": data[3]["value"]
+    };
+    console.log(formData);
+    $.ajax({
+        url: 'http://wt78.fei.stuba.sk/zadanie2/controllers/CreatePerson.php',
+        type: 'POST',
+        data: formData,
+        dataType: 'text',
+        success: displayMessage,
+    });
+}
+
 function createPlacement()
 {
     let data = $('#formAddPlacement').serializeArray();
-    console.log(data);
     var formData = {
         "person_id": data[0]["value"],
         "oh_id": data[1]["value"],

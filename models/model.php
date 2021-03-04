@@ -27,13 +27,41 @@ class OlympicsModel
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $q = $conn->query("
-    SELECT persons.name, persons.surname, olympics.year, olympics.city, olympics.type, placements.discipline
+    SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
         FROM placements
 	    LEFT JOIN persons ON placements.person_id=persons.id
         LEFT JOIn olympics ON placements.oh_id=olympics.id;
     ");
             $q->setFetchMode(PDO::FETCH_ASSOC);
             while ($r = $q->fetch()) {
+                $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
+                unset($r['id']);
+                $dataArr[] = $r;
+            }
+        } catch(PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+        }
+        return json_encode($dataArr);
+    }
+
+    public function getPlacementsById($id)
+    {
+        $dataArr = array();
+        try {
+            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $q = $conn->query("
+    SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
+        FROM placements
+	    LEFT JOIN persons ON placements.person_id=persons.id
+        LEFT JOIn olympics ON placements.oh_id=olympics.id
+        WHERE placements.person_id=" . $id);
+            $q->setFetchMode(PDO::FETCH_ASSOC);
+            while ($r = $q->fetch()) {
+                $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
+                unset($r['id']);
                 $dataArr[] = $r;
             }
         } catch(PDOException $e) {
@@ -51,7 +79,7 @@ class OlympicsModel
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $q = $conn->query("
-SELECT persons.id, persons.name, persons.surname, COUNT(placements.person_id) as wins
+SELECT persons.id, CONCAT(persons.name,' ', persons.surname) as name, COUNT(placements.person_id) as wins
     FROM placements
 	LEFT JOIN persons ON placements.person_id=persons.id
     GROUP BY placements.person_id
@@ -62,6 +90,7 @@ SELECT persons.id, persons.name, persons.surname, COUNT(placements.person_id) as
             while ($r = $q->fetch()) {
                 $r["update"] =  '<a href="#" onclick=updateRowById("id=' . $r['id'] . '")>UPRAVIŤ</a>';
                 $r["delete"] = '<a href="#" onclick=deleteRowById("action=delete&id=' . $r['id'] . '")>ZMAZAŤ</a>';
+                $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
                 unset($r['id']);
                 $dataArr[] = $r;
             }
@@ -139,6 +168,17 @@ UPDATE persons SET name=:name, surname=:surname, birth_day=:birth_day, birth_pla
             $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+            // check whether the person already exists, with same name and date
+            $q= $conn->prepare("SELECT id FROM persons WHERE name=:name AND surname=:surname AND birth_day=:birth_day");
+            $q->bindParam(":name",$arr['name'],PDO::PARAM_STR);
+            $q->bindParam(":surname",$arr['surname'],PDO::PARAM_STR);
+            $q->bindParam(":birth_day",$arr['birth_day'],PDO::PARAM_STR);
+            if (!$q->execute() || $q->fetch()['id'] != 0 ){ // if id is not zero => user already exists
+                echo "Táto osoba už existuje v databáze.";
+                return;
+            }
+
+
             $query = $conn->prepare("
 INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death_day, death_place, death_country)
        VALUES(:name, :surname, :birth_day, :birth_place, :birth_country, :death_day, :death_place, :death_country)
@@ -206,8 +246,13 @@ INSERT INTO placements (person_id, oh_id, placing, discipline)
        VALUES(:person_id, :oh_id, :placing, :discipline )
        ");
 
-            foreach($arr as $Name => &$Value)
-                $query->bindParam(':'.$Name, $Value, PDO::PARAM_INT);
+            foreach($arr as $Name => &$Value){
+                if ($Name == "discipline"){
+                    $query->bindParam(':'.$Name, $Value, PDO::PARAM_STR);
+                } else {
+                    $query->bindParam(':'.$Name, $Value, PDO::PARAM_INT);
+                }
+            }
 
             if($query->execute()){
                 echo "Záznam bol úspešne pridany.";

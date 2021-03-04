@@ -1,9 +1,3 @@
-<?php
-// TODO remove
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-?>
 <!doctype  html>
 <html lang="sk">
 <head>
@@ -17,22 +11,7 @@ error_reporting(E_ALL);
 </head>
 <body>
 
-<nav class="navbar navbar-dark navbar-expand-lg bg-dark py-4">
-    <a class="navbar-brand mb-0 h1 ml-2" href="http://wt78.fei.stuba.sk/zadanie2/">Domov</a>
-
-    <ul class="navbar-nav mr-auto mx-4">
-        <li class="nav-item">
-            <a class="nav-link" href="#" onclick="showTopTen()">TOP 10</a>
-        </li>
-    </ul>
-
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <div id="navbar_upload" class="btn-nav" onclick="showAddForm()"><a class="btn btn-primary btn-small navbar-btn mx-3 py-2">PRIDAJ</a>
-            </div>
-        </li>
-    </ul>
-</nav>
+<?php include('./views/header.php') ?>
 
 
 <!-- ADD NEW DATA FORM-->
@@ -52,7 +31,8 @@ error_reporting(E_ALL);
     </div>
 
     <div id="divAddPerson">
-        <form class="my-5 mx-5" action="http://wt78.fei.stuba.sk/zadanie2/controllers/CreatePerson.php" method="post">
+<!--        <form class="my-5 mx-5" action="http://wt78.fei.stuba.sk/zadanie2/controllers/CreatePerson.php" method="post">-->
+        <form class="my-5 mx-5" id="formAddPerson">
             <div class="row">
                 <div class="col">
                     <label for="name">Krstné meno</label>
@@ -101,7 +81,7 @@ error_reporting(E_ALL);
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary my-2" name="submit" id="post-createUser">Odoslať</button>
+            <button type="button" class="btn btn-primary my-2" id="post-btnCreatePerson" onclick="createPerson()">Odoslať</button>
         </form>
     </div>
 
@@ -165,12 +145,7 @@ error_reporting(E_ALL);
 </div>
 
 
-<footer id="indexFooter" class="text-center text-white bg-dark py-3">
-    <div class="text-center p-3 bg-dark">
-        © 2021 Copyright:
-        <a class="text-white" href="https://mdbootstrap.com/">Rastislav Kopál</a>
-    </div>
-</footer>
+<?php include('./views/footer.php') ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>

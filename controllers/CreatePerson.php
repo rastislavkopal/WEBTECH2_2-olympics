@@ -23,9 +23,5 @@ if (!empty($_POST['death_day'])){
 
 $postArr['birth_day'] = date('d.m.Y', strtotime($_POST['birth_day']));
 
-
-print_r($postArr);
-
-
 $res = $model->createPerson($postArr);
-header( "Location: http://wt78.fei.stuba.sk/zadanie2");
+echo $res;
