@@ -8,5 +8,5 @@ if (empty($username) || empty($password) || empty($servername))
 
 $model = new OlympicsModel($username, $password, $servername);
 
-$arr = $model->getOlympicWinners();
+$arr = $model->getTopTen();
 echo $arr;

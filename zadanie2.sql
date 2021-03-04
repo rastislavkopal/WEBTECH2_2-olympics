@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hostiteľ: localhost:3306
--- Čas generovania: Št 04.Mar 2021, 09:57
+-- Čas generovania: Št 04.Mar 2021, 16:02
 -- Verzia serveru: 8.0.23-0ubuntu0.20.04.1
 -- Verzia PHP: 8.0.2
 
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `olympics` (
   `id` int NOT NULL,
-  `type` varchar(5) COLLATE utf8_slovak_ci NOT NULL,
+  `type` varchar(5) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL,
   `year` year NOT NULL,
   `ord` int NOT NULL,
-  `city` varchar(50) COLLATE utf8_slovak_ci NOT NULL,
-  `country` varchar(50) COLLATE utf8_slovak_ci NOT NULL
+  `city` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL,
+  `country` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 --
@@ -85,11 +85,11 @@ INSERT INTO `olympics` (`id`, `type`, `year`, `ord`, `city`, `country`) VALUES
 
 CREATE TABLE `persons` (
   `id` int NOT NULL,
-  `name` varchar(50) COLLATE utf8_slovak_ci NOT NULL,
-  `surname` varchar(50) COLLATE utf8_slovak_ci NOT NULL,
-  `birth_day` varchar(20) COLLATE utf8_slovak_ci NOT NULL,
-  `birth_place` varchar(50) COLLATE utf8_slovak_ci NOT NULL,
-  `birth_country` varchar(50) COLLATE utf8_slovak_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL,
+  `surname` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL,
+  `birth_day` varchar(20) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL,
+  `birth_place` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL,
+  `birth_country` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL,
   `death_day` varchar(15) CHARACTER SET utf8 COLLATE utf8_slovak_ci DEFAULT NULL,
   `death_place` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci DEFAULT NULL,
   `death_country` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci DEFAULT NULL
@@ -135,7 +135,7 @@ CREATE TABLE `placements` (
   `person_id` int NOT NULL,
   `oh_id` int NOT NULL,
   `placing` int NOT NULL,
-  `discipline` varchar(50) COLLATE utf8_slovak_ci NOT NULL
+  `discipline` varchar(50) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 --
@@ -242,7 +242,7 @@ ALTER TABLE `placements`
 --
 ALTER TABLE `placements`
   ADD CONSTRAINT `OLYMPICS_FK` FOREIGN KEY (`oh_id`) REFERENCES `olympics` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `PERSON_FK` FOREIGN KEY (`person_id`) REFERENCES `persons` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `PERSON_FK` FOREIGN KEY (`person_id`) REFERENCES `persons` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
