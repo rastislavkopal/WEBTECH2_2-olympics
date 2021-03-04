@@ -9,6 +9,7 @@ class OlympicsModel
     private $db_name;
     private $server_name;
 
+
     function __construct($username, $password, $servername)
     {
         if (empty($username) || empty($password) || empty($servername))
@@ -18,13 +19,25 @@ class OlympicsModel
         $this->server_name = $servername;
     }
 
+
+    private function getConnection()
+    {
+        try{
+            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $conn;
+        } catch(PDOException $e) {
+            return "Connection failed: " . $e->getMessage();
+        }
+    }
+
+
     public function getOlympicWinners()
     {
         $dataArr = array();
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $q = $conn->query("
     SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
@@ -44,20 +57,19 @@ class OlympicsModel
         return json_encode($dataArr);
     }
 
+
     public function getPlacementsById($id)
     {
         $dataArr = array();
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $q = $conn->query("
-    SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
-        FROM placements
-	    LEFT JOIN persons ON placements.person_id=persons.id
-        LEFT JOIn olympics ON placements.oh_id=olympics.id
-        WHERE placements.person_id=" . $id);
+SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
+FROM placements
+LEFT JOIN persons ON placements.person_id=persons.id
+LEFT JOIn olympics ON placements.oh_id=olympics.id
+WHERE placements.person_id=" . $id);
             $q->setFetchMode(PDO::FETCH_ASSOC);
             while ($r = $q->fetch()) {
                 $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
@@ -70,21 +82,20 @@ class OlympicsModel
         return json_encode($dataArr);
     }
 
+
     public function getTopTen()
     {
         $dataArr = array();
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $q = $conn->query("
 SELECT persons.id, CONCAT(persons.name,' ', persons.surname) as name, COUNT(placements.person_id) as wins
-    FROM placements
-	LEFT JOIN persons ON placements.person_id=persons.id
-    GROUP BY placements.person_id
-    ORDER BY wins DESC
-    LIMIT 10;
+FROM placements
+LEFT JOIN persons ON placements.person_id=persons.id
+GROUP BY placements.person_id
+ORDER BY wins DESC
+LIMIT 10;
     ");
             $q->setFetchMode(PDO::FETCH_ASSOC);
             while ($r = $q->fetch()) {
@@ -100,12 +111,11 @@ SELECT persons.id, CONCAT(persons.name,' ', persons.surname) as name, COUNT(plac
         return json_encode($dataArr);
     }
 
+
     public function deletePersonById($id)
     {
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $count=$conn->prepare("DELETE FROM persons WHERE id=:id");
             $count->bindParam(":id",$id,PDO::PARAM_INT);
@@ -121,11 +131,11 @@ SELECT persons.id, CONCAT(persons.name,' ', persons.surname) as name, COUNT(plac
         }
     }
 
+
     public function getUserData($id)
     {
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $query = $conn->prepare("SELECT * FROM persons WHERE id=:id");
             $query->bindParam(":id",$id,PDO::PARAM_INT);
@@ -137,16 +147,16 @@ SELECT persons.id, CONCAT(persons.name,' ', persons.surname) as name, COUNT(plac
         }
     }
 
+
     public function updateUserById($arr, $id)
     {
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $query = $conn->prepare("
 UPDATE persons SET name=:name, surname=:surname, birth_day=:birth_day, birth_place=:birth_place ,
-                    birth_country=:birth_country, death_day=:death_day, death_place=:death_place, death_country=:death_country
-                    WHERE id=:id");
+    birth_country=:birth_country, death_day=:death_day, death_place=:death_place, death_country=:death_country
+WHERE id=:id");
 
             foreach($arr as $Name => &$Value)
                 $query->bindParam(':'.$Name, $Value, PDO::PARAM_STR);
@@ -162,11 +172,11 @@ UPDATE persons SET name=:name, surname=:surname, birth_day=:birth_day, birth_pla
         }
     }
 
+
     public function createPerson($arr)
     {
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             // check whether the person already exists, with same name and date
             $q= $conn->prepare("SELECT id FROM persons WHERE name=:name AND surname=:surname AND birth_day=:birth_day");
@@ -177,7 +187,6 @@ UPDATE persons SET name=:name, surname=:surname, birth_day=:birth_day, birth_pla
                 echo "Táto osoba už existuje v databáze.";
                 return;
             }
-
 
             $query = $conn->prepare("
 INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death_day, death_place, death_country)
@@ -197,13 +206,12 @@ INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death
         }
     }
 
+
     public function getPersons_id_name_surname()
     {
         $dataArr = array();
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $q = $conn->query("SELECT id, name, surname FROM persons");
             $q->setFetchMode(PDO::FETCH_ASSOC);
@@ -220,9 +228,7 @@ INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death
     {
         $dataArr = array();
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $q = $conn->query("SELECT id, type, year FROM olympics");
             $q->setFetchMode(PDO::FETCH_ASSOC);
@@ -235,15 +241,14 @@ INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death
         return $dataArr;
     }
 
+
     public function createPlacing($arr)
     {
         try {
-            $conn = new PDO("mysql:host=$this->server_name;dbname=zadanie2", $this->db_name, $this->db_pass);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = $this->getConnection();
 
             $query = $conn->prepare("
-INSERT INTO placements (person_id, oh_id, placing, discipline)
-       VALUES(:person_id, :oh_id, :placing, :discipline )
+INSERT INTO placements (person_id, oh_id, placing, discipline) VALUES (:person_id, :oh_id, :placing, :discipline )
        ");
 
             foreach($arr as $Name => &$Value){
