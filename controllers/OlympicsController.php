@@ -15,5 +15,3 @@ if(!isset($_GET['id'])){
     $arr = $model->getPlacementsById($_GET['id']);
     echo $arr;
 }
-
-

@@ -43,7 +43,8 @@ class OlympicsModel
     SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
         FROM placements
 	    LEFT JOIN persons ON placements.person_id=persons.id
-        LEFT JOIn olympics ON placements.oh_id=olympics.id;
+        LEFT JOIn olympics ON placements.oh_id=olympics.id
+        WHERE placements.placing=1;
     ");
             $q->setFetchMode(PDO::FETCH_ASSOC);
             while ($r = $q->fetch()) {
