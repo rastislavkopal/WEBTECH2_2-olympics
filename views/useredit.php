@@ -42,7 +42,7 @@ if ($arr['death_day'] != null){
     <a class="navbar-brand mb-0 h1 ml-2" href="http://wt78.fei.stuba.sk/zadanie2/">Domov</a>
 </nav>
 
-<form class="my-5 mx-5" action="http://wt78.fei.stuba.sk/zadanie2/controllers/PersonController.php?action=update&id=<?php echo $arr['id'] ?>" method="post">
+<form class="my-5 mx-5 pb-5" action="http://wt78.fei.stuba.sk/zadanie2/controllers/PersonController.php?action=update&id=<?php echo $arr['id'] ?>" method="post">
     <h3 id="id">ID: <?php echo $arr['id'] ?></h3><br>
     <div class="row">
         <div class="col">
