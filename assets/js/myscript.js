@@ -70,7 +70,7 @@ function updateListOfOlympicWinners()
                     { "data" : "name", title:'Celé meno' },
                     { "data" : "year", title:'Rok výhry'  },
                     { "data" : "city", title:'Miesto konania'  },
-                    { "data" : "type", title:'Typ OH'  },
+                    { "data" : "type", title:'Typ OH', "orderData": [ 3, 1 ] },
                     { "data" : "discipline", title:'Disciplína'  }
                 ],
             });
