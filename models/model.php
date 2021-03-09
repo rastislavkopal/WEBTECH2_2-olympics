@@ -40,11 +40,11 @@ class OlympicsModel
             $conn = $this->getConnection();
 
             $q = $conn->query("
-    SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
-        FROM placements
-	    LEFT JOIN persons ON placements.person_id=persons.id
-        LEFT JOIn olympics ON placements.oh_id=olympics.id
-        WHERE placements.placing=1;
+SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
+FROM placements
+LEFT JOIN persons ON placements.person_id=persons.id
+LEFT JOIn olympics ON placements.oh_id=olympics.id
+WHERE placements.placing=1;
     ");
             $q->setFetchMode(PDO::FETCH_ASSOC);
             while ($r = $q->fetch()) {
@@ -94,6 +94,7 @@ WHERE placements.person_id=" . $id);
 SELECT persons.id, CONCAT(persons.name,' ', persons.surname) as name, COUNT(placements.person_id) as wins
 FROM placements
 LEFT JOIN persons ON placements.person_id=persons.id
+WHERE placements.placing=1
 GROUP BY placements.person_id
 ORDER BY wins DESC
 LIMIT 10;
