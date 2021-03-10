@@ -2,6 +2,9 @@
 
 include_once("../models/model.php");
 
+if (!isset($_POST['name']) || !isset($_POST['surname']) || !isset($_POST['birth_place']) || !isset($_POST['birth_country'])){
+    return "Cannot be empty";
+}
 
 $postArr = array("name" => $_POST['name'],
     "surname" => $_POST['surname'],

@@ -80,9 +80,7 @@ function updateListOfOlympicWinners()
 function updateRowById(action)
 {
     $.get("http://wt78.fei.stuba.sk/zadanie2/controllers/PersonController.php",
-        function (data) {
-
-        }
+        function (data) {}
     );
     window.location.href = "http://wt78.fei.stuba.sk/zadanie2/views/useredit.php?" + action;
 }
@@ -90,7 +88,6 @@ function updateRowById(action)
 function deleteRowById(action)
 {
     let url ="http://wt78.fei.stuba.sk/zadanie2/controllers/PersonController.php?" + action;
-    console.log(url);
     $.get(url,
         function (response) {
             displayMessage(response);
@@ -113,17 +110,24 @@ $(".form-check-input").change(function() {
 function createPerson()
 {
     let data = $('#formAddPerson').serializeArray();
+
+    for (let i = 0; i < 5; i++)
+        if (!data[i].value.length) {
+            displayMessage("Hodnota '" + data[i]["name"] + "' nesmie byt prazdna");
+            return;
+        }
+
     var formData = {
         "name": data[0]["value"],
         "surname": data[1]["value"],
         "birth_day": data[2]["value"],
-        "birth_place": data[1]["value"],
-        "birth_country": data[2]["value"],
-        "death_day": data[1]["value"],
-        "death_place": data[2]["value"],
-        "death_country": data[3]["value"]
+        "birth_place": data[3]["value"],
+        "birth_country": data[4]["value"],
+        "death_day": data[5]["value"],
+        "death_place": data[6]["value"],
+        "death_country": data[7]["value"]
     };
-    console.log(formData);
+
     $.ajax({
         url: 'http://wt78.fei.stuba.sk/zadanie2/controllers/CreatePerson.php',
         type: 'POST',
@@ -136,13 +140,20 @@ function createPerson()
 function createPlacement()
 {
     let data = $('#formAddPlacement').serializeArray();
+
+    for (let i = 0; i < data.length; i++)
+        if (!data[i].value.length) {
+            displayMessage("Hodnota '" + data[i]["name"] + "' nesmie byt prazdna");
+            return;
+        }
+
     var formData = {
         "person_id": data[0]["value"],
         "oh_id": data[1]["value"],
         "placing": data[2]["value"],
         "discipline": data[3]["value"]
     };
-    console.log(formData);
+
     $.ajax({
         url: 'http://wt78.fei.stuba.sk/zadanie2/controllers/AddPlacement.php',
         type: 'POST',

@@ -8,6 +8,8 @@ if (!isset($_GET['action']) || !isset($_GET['id']))
 
 if ($_GET['action'] == "update")
 {
+    if (!isset($_GET['name']) || !isset($_GET['surname']) || !isset($_GET['birth_day']) || !isset($_GET['birth_place']) || !isset($_GET['birth_country']))
+        echo "ERROR, request neobsahuje pozadovane parametre.";
     $postArr = array("name" => $_POST['name'],
         "surname" => $_POST['surname'],
         "birth_day" => $_POST['birth_day'],
