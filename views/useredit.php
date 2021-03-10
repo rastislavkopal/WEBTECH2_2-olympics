@@ -1,17 +1,10 @@
 <?php
-include_once("../../config.php");
 include_once("../models/model.php");
 
-if (empty($username) || empty($password) || empty($servername))
-    echo "Could not load config.";
-
-$model = new OlympicsModel($username, $password, $servername);
-
-if (!isset($_GET['id'])) {
+if (!isset($_GET['id']))
     echo "ERROR, request neobsahuje pozadovane parametre.";
-}
 
-$arr = $model->getUserData($_GET['id']);
+$arr = (new OlympicsModel())->getUserData($_GET['id']);
 
 // change dates into
 $date = str_replace('/', '-', $arr['birth_day']);
@@ -21,7 +14,6 @@ if ($arr['death_day'] != null){
     $date = str_replace('/', '-', $arr['death_day']);
     $arr['death_day'] = date('Y-m-d', strtotime($date));
 }
-
 
 ?>
 

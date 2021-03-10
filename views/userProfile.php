@@ -17,15 +17,8 @@
 
 <?php
 
-include_once("../../config.php");
-include_once("../models/model.php");
-
-if (empty($username) || empty($password) || empty($servername))
-    echo "Could not load config.";
-
-$model = new OlympicsModel($username, $password, $servername);
-
-$person = $model->getUserData($_GET['id']);
+    include_once("../models/model.php");
+    $person = (new OlympicsModel())->getUserData($_GET['id']);
 ?>
 
 

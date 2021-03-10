@@ -10,10 +10,13 @@ class OlympicsModel
     private $server_name;
 
 
-    function __construct($username, $password, $servername)
+    function __construct()
     {
+        require_once '/home/xkopalr1/public_html/config.php';
+
         if (empty($username) || empty($password) || empty($servername))
             echo "Cannot be empty string.";
+
         $this->db_name = $username;
         $this->db_pass = $password;
         $this->server_name = $servername;
@@ -46,8 +49,7 @@ LEFT JOIN persons ON placements.person_id=persons.id
 LEFT JOIn olympics ON placements.oh_id=olympics.id
 WHERE placements.placing=1;
     ");
-            $q->setFetchMode(PDO::FETCH_ASSOC);
-            while ($r = $q->fetch()) {
+            while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
                 $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
                 unset($r['id']);
                 $dataArr[] = $r;
@@ -65,14 +67,15 @@ WHERE placements.placing=1;
         try {
             $conn = $this->getConnection();
 
-            $q = $conn->query("
+            $q = $conn->prepare("
 SELECT persons.id, CONCAT(persons.name,' ',persons.surname) as name, olympics.year, olympics.city, olympics.type, placements.discipline
 FROM placements
 LEFT JOIN persons ON placements.person_id=persons.id
 LEFT JOIn olympics ON placements.oh_id=olympics.id
-WHERE placements.person_id=" . $id);
-            $q->setFetchMode(PDO::FETCH_ASSOC);
-            while ($r = $q->fetch()) {
+WHERE placements.person_id=:id");
+            $q->execute(array(":id" => $id));
+
+            while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
                 $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
                 unset($r['id']);
                 $dataArr[] = $r;
@@ -99,8 +102,7 @@ GROUP BY placements.person_id
 ORDER BY wins DESC
 LIMIT 10;
     ");
-            $q->setFetchMode(PDO::FETCH_ASSOC);
-            while ($r = $q->fetch()) {
+            while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
                 $r["update"] =  '<a href="#" onclick=updateRowById("id=' . $r['id'] . '")>UPRAVIŤ</a>';
                 $r["delete"] = '<a href="#" onclick=deleteRowById("action=delete&id=' . $r['id'] . '")>ZMAZAŤ</a>';
                 $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
@@ -121,13 +123,11 @@ LIMIT 10;
 
             $count=$conn->prepare("DELETE FROM persons WHERE id=:id");
             $count->bindParam(":id",$id,PDO::PARAM_INT);
-            if($count->execute()){
-                if ($count->rowCount()){
-                    echo "Záznam bol úspešne zmazaný.";
-                } else {
-                    echo "Nastala neočakávaná chyba. Prosím skúste to znova.";
-                }
-            }
+            if($count->execute() && $count->rowCount())
+                echo "Záznam bol úspešne zmazaný.";
+            else
+                echo "Nastala neočakávaná chyba. Prosím skúste to znova.";
+
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
@@ -142,8 +142,7 @@ LIMIT 10;
             $query = $conn->prepare("SELECT * FROM persons WHERE id=:id");
             $query->bindParam(":id",$id,PDO::PARAM_INT);
             $query->execute();
-            $res = $query->fetch();
-            return $res;
+            return $query->fetch();
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
@@ -164,11 +163,10 @@ WHERE id=:id");
                 $query->bindParam(':'.$Name, $Value, PDO::PARAM_STR);
             $query->bindParam( ":id" ,$id,PDO::PARAM_INT);
 
-            if($query->execute() && $query->rowCount()){
+            if($query->execute() && $query->rowCount())
                 echo "Záznam bol úspešne upravený.";
-            } else {
+            else
                 echo "Nastala neočakávaná chyba. Prosím skúste to znova.";
-            }
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
@@ -198,11 +196,11 @@ INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death
             foreach($arr as $Name => &$Value)
                 $query->bindParam(':'.$Name, $Value, PDO::PARAM_STR);
 
-            if($query->execute() && $query->rowCount() > 0){
+            if($query->execute() && $query->rowCount() > 0)
                 echo "Záznam bol úspešne pridany.";
-            } else {
+            else
                 echo "Nastala neočakávaná chyba. Prosím skúste to znova.";
-            }
+
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
@@ -216,10 +214,9 @@ INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death
             $conn = $this->getConnection();
 
             $q = $conn->query("SELECT id, name, surname FROM persons");
-            $q->setFetchMode(PDO::FETCH_ASSOC);
-            while ($r = $q->fetch()) {
+            while ($r = $q->fetch(PDO::FETCH_ASSOC))
                 $dataArr[] = $r;
-            }
+
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
@@ -231,12 +228,8 @@ INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death
         $dataArr = array();
         try {
             $conn = $this->getConnection();
-
             $q = $conn->query("SELECT id, type, year FROM olympics");
-            $q->setFetchMode(PDO::FETCH_ASSOC);
-            while ($r = $q->fetch()) {
-                $dataArr[] = $r;
-            }
+            $dataArr = $q->fetchAll(PDO::FETCH_ASSOC);
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
@@ -244,22 +237,18 @@ INSERT INTO persons (name, surname, birth_day, birth_place, birth_country, death
     }
 
 
-    public function createPlacing($arr)
+    public function createPlacing($arr, $discipline)
     {
         try {
             $conn = $this->getConnection();
 
-            $query = $conn->prepare("
-INSERT INTO placements (person_id, oh_id, placing, discipline) VALUES (:person_id, :oh_id, :placing, :discipline )
-       ");
+            $query = $conn->prepare("INSERT INTO placements (person_id, oh_id, placing, discipline) 
+                                                  VALUES (:person_id, :oh_id, :placing, :discipline )");
 
-            foreach($arr as $Name => &$Value){
-                if ($Name == "discipline"){
-                    $query->bindParam(':'.$Name, $Value, PDO::PARAM_STR);
-                } else {
-                    $query->bindParam(':'.$Name, $Value, PDO::PARAM_INT);
-                }
-            }
+            foreach($arr as $Name => &$Value)
+                $query->bindParam(':'.$Name, $Value, PDO::PARAM_INT);
+
+            $query->bindParam(':discipline', $discipline, PDO::PARAM_STR);
 
             if($query->execute()){
                 echo "Záznam bol úspešne pridany.";

@@ -1,17 +1,12 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-include_once("../../config.php");
 include_once("../models/model.php");
 
-if (empty($username) || empty($password) || empty($servername))
-    echo "Could not load config.";
+if (!isset($_GET['id']))
+    echo (new OlympicsModel())->getOlympicWinners();
+else
+    echo (new OlympicsModel())->getPlacementsById($_GET['id']);
 
-$model = new OlympicsModel($username, $password, $servername);
-
-if(!isset($_GET['id'])){
-    $arr = $model->getOlympicWinners();
-    echo $arr;
-} else{
-    $arr = $model->getPlacementsById($_GET['id']);
-    echo $arr;
-}
