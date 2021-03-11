@@ -184,7 +184,7 @@ WHERE id=:id");
             $q->bindParam(":surname",$arr['surname'],PDO::PARAM_STR);
             $q->bindParam(":birth_day",$arr['birth_day'],PDO::PARAM_STR);
             if (!$q->execute() || $q->fetch()['id'] != 0 ){ // if id is not zero => user already exists
-                echo "Táto osoba už existuje v databáze.";
+                echo "Osoba s takymto menom, priezviskom aj datum už existuje v databáze.";
                 return;
             }
 

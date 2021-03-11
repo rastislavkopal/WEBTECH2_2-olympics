@@ -48,7 +48,8 @@
                 <input type="text" class="form-control" placeholder="Krajina" name="death_country" id="death_country">
             </div>
         </div>
-
+        <span id="inforCreatePerson">* pozn: rovnaký používateľ je len taký, ktorý ma rovnaké meno, priezvisko aj dátum narodenia.</span><br>
         <button type="button" class="btn btn-primary my-2" id="post-btnCreatePerson" onclick="createPerson()">Odoslať</button>
+
     </form>
 </div>
