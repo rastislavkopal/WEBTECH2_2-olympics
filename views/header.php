@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark navbar-expand-lg bg-dark py-4">
+<nav class="navbar navbar-dark navbar-expand-lg bg-dark py-3">
     <a class="navbar-brand mb-0 h1 ml-2" href="http://wt78.fei.stuba.sk/zadanie2/">Domov</a>
 
     <ul class="navbar-nav mr-auto mx-4">

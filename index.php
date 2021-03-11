@@ -17,16 +17,12 @@
 <!-- ADD NEW DATA FORM-->
 <div id="uploader_div">
     <!-- Choose action   -->
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="flexRadioDefault" id="selectedAddPerson" checked>
-        <label class="form-check-label" for="selectedAddPerson">
-            Pridať osobu
+    <div class="btn-group btn-group-toggle form-check" data-toggle="buttons">
+        <label class="btn btn-outline-primary active mr-2 px-5">
+            <input type="radio" name="options" id="selectedAddPerson" class="form-check-input" autocomplete="off" checked> Pridať osobu
         </label>
-    </div>
-    <div class="form-check mb-1">
-        <input class="form-check-input" type="radio" name="flexRadioDefault" id="selectedAddPlacement">
-        <label class="form-check-label" for="selectedAddPlacement">
-            Pridať umiestnenie pre osobu
+        <label class="btn btn-outline-primary mx-2 px-4">
+            <input type="radio" name="options" id="selectedAddPlacement" class="form-check-input" autocomplete="off"> Pridať umiestnenie
         </label>
     </div>
 

@@ -1,5 +1,5 @@
 <div id="divAddPerson">
-    <form class="my-5 mx-5" id="formAddPerson">
+    <form class="my-3 mx-3" id="formAddPerson">
         <div class="row">
             <div class="col">
                 <label for="name">Krstné meno</label>
@@ -30,8 +30,9 @@
             </div>
         </div>
 
+    <hr>
 
-        <div class="row my-5">
+        <div class="row my-3">
             <div class="col-12">
                 <label for="death_day" class="col-form-label">Dátum úmrtia</label>
                 <input class="form-control" type="date" id="death_day"  name="death_day">
