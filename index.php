@@ -19,10 +19,10 @@
     <!-- Choose action   -->
     <div class="btn-group btn-group-toggle form-check" data-toggle="buttons">
         <label class="btn btn-outline-primary active mr-2 px-5">
-            <input type="radio" name="options" id="selectedAddPerson" class="form-check-input" autocomplete="off" checked> Pridať osobu
+            <input type="radio" name="options" id="selectedAddPerson" class="form-check-input" checked> Pridať osobu
         </label>
         <label class="btn btn-outline-primary mx-2 px-4">
-            <input type="radio" name="options" id="selectedAddPlacement" class="form-check-input" autocomplete="off"> Pridať umiestnenie
+            <input type="radio" name="options" id="selectedAddPlacement" class="form-check-input"> Pridať umiestnenie
         </label>
     </div>
 
