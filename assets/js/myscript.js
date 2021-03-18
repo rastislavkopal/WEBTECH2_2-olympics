@@ -31,7 +31,7 @@ function showAddForm()
 function showTopTen()
 {
     clearTableZone();
-    $.get("http://wt78.fei.stuba.sk/zadanie2/controllers/GetTopTen.php",
+    $.get("https://wt78.fei.stuba.sk/zadanie2/controllers/GetTopTen.php",
         function (data) {
             json = JSON.parse(data)
             $("#table_id").DataTable({
@@ -55,7 +55,7 @@ function showTopTen()
 function updateListOfOlympicWinners()
 {
     clearTableZone();
-    let url = "http://wt78.fei.stuba.sk/zadanie2/controllers/OlympicsController.php";
+    let url = "https://wt78.fei.stuba.sk/zadanie2/controllers/OlympicsController.php";
     $.get(url,
         function (data) {
             $("#table_id").DataTable({
@@ -79,15 +79,15 @@ function updateListOfOlympicWinners()
 
 function updateRowById(action)
 {
-    $.get("http://wt78.fei.stuba.sk/zadanie2/controllers/PersonController.php",
+    $.get("https://wt78.fei.stuba.sk/zadanie2/controllers/PersonController.php",
         function (data) {}
     );
-    window.location.href = "http://wt78.fei.stuba.sk/zadanie2/views/useredit.php?" + action;
+    window.location.href = "https://wt78.fei.stuba.sk/zadanie2/views/useredit.php?" + action;
 }
 
 function deleteRowById(action)
 {
-    let url ="http://wt78.fei.stuba.sk/zadanie2/controllers/PersonController.php?" + action;
+    let url ="https://wt78.fei.stuba.sk/zadanie2/controllers/PersonController.php?" + action;
     $.get(url,
         function (response) {
             displayMessage(response);
@@ -129,7 +129,7 @@ function createPerson()
     };
 
     $.ajax({
-        url: 'http://wt78.fei.stuba.sk/zadanie2/controllers/CreatePerson.php',
+        url: 'https://wt78.fei.stuba.sk/zadanie2/controllers/CreatePerson.php',
         type: 'POST',
         data: formData,
         dataType: 'text',
@@ -155,7 +155,7 @@ function createPlacement()
     };
 
     $.ajax({
-        url: 'http://wt78.fei.stuba.sk/zadanie2/controllers/AddPlacement.php',
+        url: 'https://wt78.fei.stuba.sk/zadanie2/controllers/AddPlacement.php',
         type: 'POST',
         data: formData,
         dataType: 'text',

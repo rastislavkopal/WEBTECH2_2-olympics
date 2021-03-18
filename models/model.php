@@ -50,7 +50,7 @@ LEFT JOIn olympics ON placements.oh_id=olympics.id
 WHERE placements.placing=1;
     ");
             while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
-                $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
+                $r['name'] = "<a href='" . 'https://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
                 unset($r['id']);
                 $dataArr[] = $r;
             }
@@ -76,7 +76,7 @@ WHERE placements.person_id=:id");
             $q->execute(array(":id" => $id));
 
             while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
-                $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
+                $r['name'] = "<a href='" . 'https://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
                 unset($r['id']);
                 $dataArr[] = $r;
             }
@@ -105,7 +105,7 @@ LIMIT 10;
             while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
                 $r["update"] =  '<a href="#" onclick=updateRowById("id=' . $r['id'] . '")>UPRAVIŤ</a>';
                 $r["delete"] = '<a href="#" onclick=deleteRowById("action=delete&id=' . $r['id'] . '")>ZMAZAŤ</a>';
-                $r['name'] = "<a href='" . 'http://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
+                $r['name'] = "<a href='" . 'https://wt78.fei.stuba.sk/zadanie2/views/userProfile.php?id=' . $r['id'] ."'>" . $r['name'] . "</a>";
                 unset($r['id']);
                 $dataArr[] = $r;
             }

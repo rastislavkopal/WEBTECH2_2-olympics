@@ -19,7 +19,7 @@ if ($_GET['action'] == "update")
         "death_place" => $_POST['death_place'],
         "death_country" => $_POST['death_country']);
     echo (new OlympicsModel())->updateUserById($postArr, $_GET['id']);
-    header( "Location: http://wt78.fei.stuba.sk/zadanie2/" );
+    header( "Location: https://wt78.fei.stuba.sk/zadanie2/" );
 } else if ($_GET['action'] == "delete")
 {
     echo (new OlympicsModel())->deletePersonById($_GET['id']);

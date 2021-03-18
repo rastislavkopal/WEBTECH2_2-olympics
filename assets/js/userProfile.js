@@ -12,7 +12,7 @@ function updateListOfOlympicWinners()
 {
     clearTableZone();
     let searchParams = new URLSearchParams(window.location.search);
-    let url = "http://wt78.fei.stuba.sk/zadanie2/controllers/OlympicsController.php?id=" + searchParams.get('id');
+    let url = "https://wt78.fei.stuba.sk/zadanie2/controllers/OlympicsController.php?id=" + searchParams.get('id');
     $.get(url,
         function (data) {
             $("#table_id").DataTable({

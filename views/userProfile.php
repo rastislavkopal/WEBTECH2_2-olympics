@@ -17,9 +17,9 @@ include_once("../models/model.php");
 $person = (new OlympicsModel())->getUserData($_GET['id']);
 ?>
 <nav class="navbar navbar-dark navbar-right bg-dark py-3 sticky-top">
-    <a class="navbar-brand mb-0 h1 ml-2" href="http://wt78.fei.stuba.sk/zadanie2/">Domov</a>
+    <a class="navbar-brand mb-0 h1 ml-2" href="https://wt78.fei.stuba.sk/zadanie2/">Domov</a>
     <div id="navbar_upload" class="btn-nav">
-        <a href="http://wt78.fei.stuba.sk/zadanie2/views/useredit.php?id=<?php echo $person['id'] ?>" class="btn btn-primary btn-small navbar-btn mx-3 py-2">UPRAVIŤ</a>
+        <a href="https://wt78.fei.stuba.sk/zadanie2/views/useredit.php?id=<?php echo $person['id'] ?>" class="btn btn-primary btn-small navbar-btn mx-3 py-2">UPRAVIŤ</a>
     </div>
 </nav>
 
